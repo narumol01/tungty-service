@@ -14,5 +14,4 @@ data class PartyDTO (
     val memberList: List<String>,
     val createDateTime: String, // Assuming date as string for simplicity
     val updateDateTime: String // Assuming date as string for simplicity
-
 )
