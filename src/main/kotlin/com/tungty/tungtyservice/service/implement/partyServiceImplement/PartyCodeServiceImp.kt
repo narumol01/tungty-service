@@ -1,11 +1,11 @@
 package com.tungty.tungtyservice.service.implement.partyServiceImplement
 
-import com.tungty.tungtyservice.service.partyService.GenPartyCodeService
+import com.tungty.tungtyservice.service.partyService.PartyCodeService
 import org.springframework.stereotype.Service
 import kotlin.random.Random
 
 @Service
-class GenPartyCodeServiceImp: GenPartyCodeService {
+class PartyCodeServiceImp: PartyCodeService {
     override fun genPartyCode(partyId: String): String {
         val charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
         val random = Random.Default
@@ -15,6 +15,7 @@ class GenPartyCodeServiceImp: GenPartyCodeService {
             .joinToString("")
 
         println("Random String: $randomString")
+        //save code to mongo
         return randomString
     }
 }

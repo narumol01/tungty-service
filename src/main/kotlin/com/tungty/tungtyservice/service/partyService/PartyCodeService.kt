@@ -1,5 +1,5 @@
 package com.tungty.tungtyservice.service.partyService
 
-interface  GenPartyCodeService {
+interface PartyCodeService {
     fun genPartyCode(partyId:String) : String
 }
