@@ -45,10 +45,16 @@ class testController {
         return chatService.findAllMessage()
     }
 
-    //Gencode
+    //GenPartycode
     @PostMapping("genPartyCode/{partyId}")
     fun genPartyCode(@PathVariable("partyId") partyId: String): String {
         println("genPartyCode at controller")
         return partyCodeService.genPartyCode(partyId)
+    }
+    //getPartycode
+    @GetMapping("PartyCode/{partyId}")
+    fun getPartyCode(@PathVariable("partyId") partyId: String): String {
+        println("Get PartyCode at controller")
+        return partyCodeService.getPartyCode(partyId)
     }
 }
