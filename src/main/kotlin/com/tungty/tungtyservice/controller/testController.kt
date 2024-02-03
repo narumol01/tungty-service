@@ -21,9 +21,6 @@ class testController {
 
     @Autowired
     lateinit var chatService: ChatService
-    //gencode
-    @Autowired
-    lateinit var partyCodeService: PartyCodeService
 
     @GetMapping("say")
     fun say(): String{
@@ -45,16 +42,4 @@ class testController {
         return chatService.findAllMessage()
     }
 
-    //GenPartycode
-    @PostMapping("genPartyCode/{partyId}")
-    fun genPartyCode(@PathVariable("partyId") partyId: String): String {
-        println("genPartyCode at controller")
-        return partyCodeService.genPartyCode(partyId)
-    }
-    //getPartycode
-    @GetMapping("PartyCode/{partyId}")
-    fun getPartyCode(@PathVariable("partyId") partyId: String): String {
-        println("Get PartyCode at controller")
-        return partyCodeService.getPartyCode(partyId)
-    }
 }
