@@ -1,4 +1,4 @@
-package com.tungty.tungtyservice.dto
+package com.tungty.tungtyservice.DTO
 
 import java.util.StringJoiner
 
