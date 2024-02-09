@@ -33,15 +33,15 @@ class PartyController {
 
 
     //CRUD party
-//    @GetMapping("/{id}")
-//    fun getParty(@PathVariable id: String): ResponseEntity<Party?> {
-//        val party = partyService.getPartyById(id)
-//        return if (party != null) {
-//            ResponseEntity(party, HttpStatus.OK)
-//        } else {
-//            ResponseEntity(HttpStatus.NOT_FOUND)
-//        }
-//    }
+    @GetMapping("/{id}")
+    fun getParty(@PathVariable id: String): ResponseEntity<PartyEntity> {
+        val party = partyServiceImp.getPartyById(id)
+        return if (party != null) {
+            ResponseEntity(party, HttpStatus.OK)
+        } else {
+            ResponseEntity(HttpStatus.NOT_FOUND)
+        }
+    }
 
     @GetMapping()
     fun getAllParties(): ResponseEntity<Flux<PartyEntity>> {
@@ -49,6 +49,7 @@ class PartyController {
         val parties = partyServiceImp.getAllParties()
         return ResponseEntity(parties, HttpStatus.OK)
     }
+
 //
 //    @PutMapping("/{id}")
 //    fun updateParty(@PathVariable id: String, @RequestBody updatedParty: Party): ResponseEntity<Party?> {
@@ -62,7 +63,7 @@ class PartyController {
 //
 //    @DeleteMapping("/{id}")
 //    fun deleteParty(@PathVariable id: String): ResponseEntity<Unit> {
-//        val success = partyService.deleteParty(id)
+//        val success = partyServiceImp.deleteParty(id)
 //        return if (success) {
 //            ResponseEntity(HttpStatus.NO_CONTENT)
 //        } else {

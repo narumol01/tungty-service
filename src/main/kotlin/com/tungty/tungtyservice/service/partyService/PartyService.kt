@@ -10,6 +10,7 @@ interface PartyService {
 
 
     fun getAllParties() : Flux<PartyEntity>
+    fun getPartyById(partyId:String): PartyEntity
 
 
 

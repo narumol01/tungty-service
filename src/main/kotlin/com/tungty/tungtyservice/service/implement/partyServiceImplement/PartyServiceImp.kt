@@ -33,6 +33,9 @@ class PartyServiceImp: PartyService {
     override fun getAllParties(): Flux<PartyEntity> {
         return partyRepository.findAll()
     }
+    override fun getPartyById(partyId:String): PartyEntity {
+        return partyRepository.findByPartyId(partyId)
+    }
 
 //    override fun findAllParty(): Flux<MessageEntity> {
 //        return partyRepository.findAll()
