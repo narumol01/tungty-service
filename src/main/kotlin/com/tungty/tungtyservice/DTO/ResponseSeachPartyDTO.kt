@@ -1,6 +1,4 @@
-package com.tungty.tungtyservice.dto
-
-import com.tungty.tungtyservice.DTO.PartyDTO
+package com.tungty.tungtyservice.DTO
 
 data class ResponseSeachPartyDTO(
     var publicPartyList: List<PartyDTO>,

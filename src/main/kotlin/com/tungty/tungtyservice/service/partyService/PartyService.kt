@@ -1,8 +1,9 @@
 package com.tungty.tungtyservice.service.partyService
 
-import com.tungty.tungtyservice.dto.ReqCreatePartyDTO
+import com.tungty.tungtyservice.DTO.ReqCreatePartyDTO
 import com.tungty.tungtyservice.entity.PartyEntity
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 interface PartyService {
     fun genPartyCode(partyId:String) : String
@@ -11,7 +12,7 @@ interface PartyService {
 
 
     fun getAllParties() : Flux<PartyEntity>
-    fun getPartyById(partyId:String): PartyEntity
+    fun getPartyById(partyId:String): Mono<PartyEntity>
 
 
 

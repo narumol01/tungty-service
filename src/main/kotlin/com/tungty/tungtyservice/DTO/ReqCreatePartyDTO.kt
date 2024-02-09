@@ -1,6 +1,5 @@
-package com.tungty.tungtyservice.dto
+package com.tungty.tungtyservice.DTO
 
-import com.tungty.tungtyservice.DTO.UserDTO
 import java.sql.Time
 import java.sql.Timestamp
 
@@ -9,8 +8,11 @@ data class ReqCreatePartyDTO(
     var partyDescription: String,
     var partyType: String,
     var partyCatagory: String,
-    var appointmentDate: Timestamp,
-    var appointmantTime: Time?,
+    var appointmentDate: String,
+    var appointmentTime: String,
     var memberAmount: Int,
-    var memberList: List<UserDTO>
+//    var memberList: List<UserDTO>
+    //pls change it back
+    var memberList: List<String>
+
 )

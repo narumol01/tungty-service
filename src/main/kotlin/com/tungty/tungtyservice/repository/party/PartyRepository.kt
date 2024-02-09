@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface PartyRepository: ReactiveMongoRepository<PartyEntity, String> {
     // ...
-    fun findByPartyId(partyId: String): PartyEntity
+//    fun findByPartyId(partyId: String): PartyEntity
 }

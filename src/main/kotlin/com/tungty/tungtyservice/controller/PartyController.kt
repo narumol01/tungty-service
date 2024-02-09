@@ -1,13 +1,14 @@
 package com.tungty.tungtyservice.controller
 
+import com.tungty.tungtyservice.DTO.ReqCreatePartyDTO
 import com.tungty.tungtyservice.entity.PartyEntity
 import com.tungty.tungtyservice.service.implement.partyServiceImplement.PartyServiceImp
-import com.tungty.tungtyservice.service.partyService.PartyService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 @RestController
 @RequestMapping("/party")
@@ -34,7 +35,7 @@ class PartyController {
 
     //CRUD party
     @GetMapping("/{id}")
-    fun getParty(@PathVariable id: String): ResponseEntity<PartyEntity> {
+    fun getPartyById(@PathVariable id: String): ResponseEntity<Mono<PartyEntity>> {
         val party = partyServiceImp.getPartyById(id)
         return if (party != null) {
             ResponseEntity(party, HttpStatus.OK)
@@ -48,6 +49,10 @@ class PartyController {
         println("get all party")
         val parties = partyServiceImp.getAllParties()
         return ResponseEntity(parties, HttpStatus.OK)
+    }
+    @PostMapping()
+    fun createParty(@RequestBody reqCreatePartyDTO:ReqCreatePartyDTO) : String {
+        return partyServiceImp.createParty(reqCreatePartyDTO)
     }
 
 //

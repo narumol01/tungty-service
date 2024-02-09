@@ -2,15 +2,17 @@ package com.tungty.tungtyservice.service.implement.partyServiceImplement
 
 
 //import com.tungty.tungtyservice.dto.ReqCreatePartyDTO
-import com.tungty.tungtyservice.dto.ReqCreatePartyDTO
+import com.tungty.tungtyservice.DTO.ReqCreatePartyDTO
 import com.tungty.tungtyservice.entity.PartyEntity
 import com.tungty.tungtyservice.repository.party.PartyRepository
 import com.tungty.tungtyservice.service.partyService.PartyService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 import kotlin.random.Random
 
 @Service
@@ -36,8 +38,11 @@ class PartyServiceImp: PartyService {
     override fun getAllParties(): Flux<PartyEntity> {
         return partyRepository.findAll()
     }
-    override fun getPartyById(partyId:String): PartyEntity {
-        return partyRepository.findByPartyId(partyId)
+    override fun getPartyById(partyId: String): Mono<PartyEntity> {
+//        try {
+//            partyRepository.findById(partyId)
+//        }
+        return partyRepository.findById(partyId)
     }
 
 //    override fun findAllParty(): Flux<MessageEntity> {
@@ -45,30 +50,39 @@ class PartyServiceImp: PartyService {
 //    }
 
 
-    override fun createParty(reqCreatePartyDTO: ReqCreatePartyDTO): PartyEntity {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
-        val current = LocalDateTime.now().format(formatter)
-        val party = PartyEntity(
-            partyId = UUID.randomUUID().toString(),
-//            partyOwner = reqCreatePartyDTO.partyOwner,
-            partyOwner = "TestName",
-            partyName = reqCreatePartyDTO.partyName,
-            partyDescription = reqCreatePartyDTO.partyDescription,
-            partyType = reqCreatePartyDTO.partyType,
-            appointmentDate = reqCreatePartyDTO.appointmentDate,
-            appointmentTime = reqCreatePartyDTO.appointmantTime?.toString() ?: "",
-            memberAmount = reqCreatePartyDTO.memberAmount,
-            memberList = reqCreatePartyDTO.memberList.map { it.userId }, // Assuming UserDTO has a userId property
-            createDateTime = current.toString(),
-            updateDateTime = current.toString()
-        )
+    override fun createParty(reqCreatePartyDTO: ReqCreatePartyDTO): String {
+        try {
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+            val current = LocalDateTime.now().format(formatter)
+            val id = UUID.randomUUID().toString()
+            val partyOwner = "TestName"
 
-        return partyRepository.save(party)
+            val party = PartyEntity(
+                partyId = id,
+                partyOwner = partyOwner,
+                partyName = reqCreatePartyDTO.partyName,
+                partyDescription = reqCreatePartyDTO.partyDescription,
+                partyType = reqCreatePartyDTO.partyType,
+                partyCode = if (reqCreatePartyDTO.partyType == "Private") genPartyCode(id) else "",
+                partyCategory = "test",
+                appointmentDate = current.toString(),
+                appointmentTime = reqCreatePartyDTO.appointmentTime?.toString() ?: "",
+                memberAmount = reqCreatePartyDTO.memberAmount,
+                memberList = reqCreatePartyDTO.memberList,
+                createDateTime = current.toString(),
+                updateDateTime = current.toString()
+            )
+
+            val result = partyRepository.save(party)
+
+            return result.block()?.toString() ?: "fail"
+        } catch (error: Exception) {
+            return error.toString()
+        }
     }
 
-//    fun getPartyById(id: String): Party? {
-//        return partyRepository.findById(id).orElse(null)
-//    }
+
+
 //
 //    fun getAllParties(): List<Party> {
 //        return partyRepository.findAll()
