@@ -1,7 +1,6 @@
 package com.tungty.tungtyservice.DTO
 
 data class ReqRegisterDTO (
-    val userId: String,
     val name: String,
     val surname: String,
     val username: String,
@@ -11,6 +10,4 @@ data class ReqRegisterDTO (
     val field: String,
     val year: Int,
     val profileImg: String,
-    val createDateTime: String, // Assuming date as string for simplicity
-    val updateDateTime: String // Assuming date as string for simplicity
     )

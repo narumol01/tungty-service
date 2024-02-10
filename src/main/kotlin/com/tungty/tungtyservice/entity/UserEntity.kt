@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 
 // User Entity
 
-@Document(collection = "User")
+@Document(collection = "UserCollection")
 data class UserEntity(
         @Id
         val userId: String,
