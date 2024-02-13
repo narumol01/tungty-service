@@ -7,7 +7,7 @@ data class ReqCreatePartyDTO(
     var partyName: String,
     var partyDescription: String,
     var partyType: String,
-    var partyCatagory: String,
+    var partyCategory: String,
     var appointmentDate: String,
     var appointmentTime: String,
     var memberAmount: Int,

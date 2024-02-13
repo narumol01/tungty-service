@@ -3,13 +3,17 @@ package com.tungty.tungtyservice.service.implement.partyServiceImplement
 
 //import com.tungty.tungtyservice.dto.ReqCreatePartyDTO
 import com.tungty.tungtyservice.DTO.ReqCreatePartyDTO
+import com.tungty.tungtyservice.DTO.ReqEditPartyDTO
 import com.tungty.tungtyservice.entity.PartyEntity
 import com.tungty.tungtyservice.repository.party.PartyRepository
 import com.tungty.tungtyservice.service.partyService.PartyService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.crossstore.ChangeSetPersister
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.sql.Time
+import java.sql.Timestamp
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -64,7 +68,7 @@ class PartyServiceImp: PartyService {
                 partyDescription = reqCreatePartyDTO.partyDescription,
                 partyType = reqCreatePartyDTO.partyType,
                 partyCode = if (reqCreatePartyDTO.partyType == "Private") genPartyCode(id) else "",
-                partyCategory = "test",
+                partyCategory = reqCreatePartyDTO.partyCategory,
                 appointmentDate = current.toString(),
                 appointmentTime = reqCreatePartyDTO.appointmentTime?.toString() ?: "",
                 memberAmount = reqCreatePartyDTO.memberAmount,
@@ -81,6 +85,65 @@ class PartyServiceImp: PartyService {
         }
     }
 
+//    override fun editParty(reqEditPartyDTO: ReqEditPartyDTO): String {
+//        try {
+//            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+//            val current = LocalDateTime.now().format(formatter)
+//            // Fetch the existing party entity from the database
+//            val partyId = reqEditPartyDTO.partyId
+//
+//            val existingParty : Mono<PartyEntity> = partyRepository.findById(partyId)
+//            // Update only the attributes that need to be changed
+//            existingParty.partyName = reqEditPartyDTO.partyName
+//            existingParty.partyDescription = reqEditPartyDTO.partyDescription
+//            existingParty.partyType = reqEditPartyDTO.partyType
+//            existingParty.partyCatagory = reqEditPartyDTO.partyCatagory
+//            existingParty.partyCode = if (reqEditPartyDTO.partyType == "Private") genPartyCode(partyId) else ""
+//
+//            existingParty.appointmentDate = reqEditPartyDTO.appointmentDate
+//            existingParty.appointmentTime = reqEditPartyDTO.appointmentTime
+////            existingParty.memberAmount = reqEditPartyDTO.memberAmount
+////            existingParty.memberList = reqEditPartyDTO.memberList
+//            existingParty.updateDateTime = current.toString()
+//            // Save the updated party entity back to the database
+//            val result = partyRepository.save(existingParty).toString()
+//
+//
+//            return result.block()?.toString() ?: "fail"
+//        } catch (error: Exception) {
+//            return error.toString()
+//        }
+//    }
+override fun editParty(reqEditPartyDTO: ReqEditPartyDTO): String {
+    try {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+        val current = LocalDateTime.now().format(formatter)
+        // Fetch the existing party entity from the database
+        val partyId = reqEditPartyDTO.partyId
+
+        var existingPartyMono: Mono<PartyEntity> = partyRepository.findById(partyId)
+
+        return existingPartyMono.flatMap { existingParty ->
+            // Update only the attributes that need to be changed
+            existingParty.partyName = reqEditPartyDTO.partyName
+            existingParty.partyDescription = reqEditPartyDTO.partyDescription
+            existingParty.partyType = reqEditPartyDTO.partyType
+            existingParty.partyCategory = reqEditPartyDTO.partyCategory
+            existingParty.partyCode = if (reqEditPartyDTO.partyType == "Private") genPartyCode(partyId) else ""
+
+            existingParty.appointmentDate = reqEditPartyDTO.appointmentDate
+            existingParty.appointmentTime = reqEditPartyDTO.appointmentTime
+            // existingParty.memberAmount = reqEditPartyDTO.memberAmount
+            // existingParty.memberList = reqEditPartyDTO.memberList
+            existingParty.updateDateTime = current.toString()
+
+            // Save the updated party entity back to the database
+            partyRepository.save(existingParty)
+        }.block()?.toString() ?: "fail"
+    } catch (error: Exception) {
+        return error.toString()
+    }
+}
 
 
 //
