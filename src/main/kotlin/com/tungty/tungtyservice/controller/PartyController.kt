@@ -82,7 +82,7 @@ class PartyController {
 //        }
     }
 
-
+    //join private party using partyCode
     @PutMapping("joinPrivate")
     fun joinPrivateParty(
         @RequestBody reqJoinPrivatePartyDTO: ReqJoinPrivatePartyDTO
