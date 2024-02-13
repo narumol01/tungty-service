@@ -148,6 +148,32 @@ override fun editParty(reqEditPartyDTO: ReqEditPartyDTO): String {
 }
 
 
+//    override fun joinPrivateParty(reqJoinPrivatePartyDTO: ReqJoinPrivatePartyDTO): String {
+//        try {
+//            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+//            val current = LocalDateTime.now().format(formatter)
+//
+//            val partyCode = reqJoinPrivatePartyDTO.partyCode
+//            val userId = reqJoinPrivatePartyDTO.userId
+//
+//            val existingPartyFlux: Flux<PartyEntity> = partyRepository.findAll()
+//
+//            return existingPartyFlux
+//                .filter { party -> partyCode == party.partyCode && party.memberList.size < party.memberAmount }
+//                .flatMap { existingParty ->
+//                    // Append the user to the memberList
+//                    existingParty.memberList = existingParty.memberList.plus(userId)
+//                    existingParty.updateDateTime = current.toString()
+//
+//                    // Save the updated party entity back to the database
+//                    partyRepository.save(existingParty)
+//                }
+//                .blockLast()?.toString() ?: "fail"
+//        } catch (error: Exception) {
+//            return error.toString()
+//        }
+//    }
+
     override fun joinPrivateParty(reqJoinPrivatePartyDTO: ReqJoinPrivatePartyDTO): String {
         try {
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
@@ -159,7 +185,7 @@ override fun editParty(reqEditPartyDTO: ReqEditPartyDTO): String {
             val existingPartyFlux: Flux<PartyEntity> = partyRepository.findAll()
 
             return existingPartyFlux
-                .filter { party -> partyCode == party.partyCode }
+                .filter { party -> partyCode == party.partyCode && party.memberList.size < party.memberAmount }
                 .flatMap { existingParty ->
                     // Append the user to the memberList
                     existingParty.memberList = existingParty.memberList.plus(userId)
@@ -168,39 +194,66 @@ override fun editParty(reqEditPartyDTO: ReqEditPartyDTO): String {
                     // Save the updated party entity back to the database
                     partyRepository.save(existingParty)
                 }
-                .blockLast() // blockLast() is used to wait for the completion of the Flux and get the last emitted element
-                ?.toString() ?: "fail"
+                .blockLast()?.toString() ?: "fail or Party is full. Cannot join."
         } catch (error: Exception) {
             return error.toString()
         }
     }
 
-
     override fun joinParty(reqJoinPartyDTO: ReqJoinPartyDTO): String {
-
         try {
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
             val current = LocalDateTime.now().format(formatter)
             // Fetch the existing party entity from the database
             val userId = reqJoinPartyDTO.userId
-
             val partyId = reqJoinPartyDTO.partyId
 
             var existingPartyMono: Mono<PartyEntity> = partyRepository.findById(partyId)
 
             return existingPartyMono.flatMap { existingParty ->
-                // Update only the attributes that need to be changed
-                existingParty.memberList = existingParty.memberList.plus(reqJoinPartyDTO.userId)
-                existingParty.updateDateTime = current.toString()
+                if (existingParty.memberList.size < existingParty.memberAmount) {
+                    // Update only the attributes that need to be changed
+                    existingParty.memberList = existingParty.memberList.plus(userId)
+                    existingParty.updateDateTime = current.toString()
 
-                // Save the updated party entity back to the database
-                partyRepository.save(existingParty)
+                    // Save the updated party entity back to the database
+                    partyRepository.save(existingParty)
+                } else {
+                    throw IllegalArgumentException("Party is full. Cannot join.")
+                }
             }.block()?.toString() ?: "fail"
         } catch (error: Exception) {
             return error.toString()
         }
-
     }
+
+//    override fun joinParty(reqJoinPartyDTO: ReqJoinPartyDTO): String {
+//
+//        try {
+//            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+//            val current = LocalDateTime.now().format(formatter)
+//            // Fetch the existing party entity from the database
+//            val userId = reqJoinPartyDTO.userId
+//
+//            val partyId = reqJoinPartyDTO.partyId
+//
+//            var existingPartyMono: Mono<PartyEntity> = partyRepository.findById(partyId)
+//
+//            return existingPartyMono.flatMap { existingParty ->
+//                // Update only the attributes that need to be changed
+//                existingParty.memberList = existingParty.memberList.plus(reqJoinPartyDTO.userId)
+//                existingParty.updateDateTime = current.toString()
+//
+//                // Save the updated party entity back to the database
+//                partyRepository.save(existingParty)
+//            }.block()?.toString() ?: "fail"
+//        } catch (error: Exception) {
+//            return error.toString()
+//        }
+//
+//    }
+
+
 
 
 
