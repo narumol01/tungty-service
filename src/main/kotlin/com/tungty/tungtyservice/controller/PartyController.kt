@@ -1,7 +1,9 @@
 package com.tungty.tungtyservice.controller
 
-import com.tungty.tungtyservice.DTO.ReqCreatePartyDTO
-import com.tungty.tungtyservice.DTO.ReqEditPartyDTO
+import com.tungty.tungtyservice.DTO.party.ReqCreatePartyDTO
+import com.tungty.tungtyservice.DTO.party.ReqEditPartyDTO
+import com.tungty.tungtyservice.DTO.party.ReqJoinPartyDTO
+import com.tungty.tungtyservice.DTO.party.ReqJoinPrivatePartyDTO
 import com.tungty.tungtyservice.entity.PartyEntity
 import com.tungty.tungtyservice.service.implement.partyServiceImplement.PartyServiceImp
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,6 +27,7 @@ class PartyController {
         println("genPartyCode at controller")
         return partyServiceImp.genPartyCode(partyId)
     }
+
     //getPartycode
     @GetMapping("partyCode/{partyId}")
     fun getPartyCode(@PathVariable partyId: String): String {
@@ -51,13 +54,21 @@ class PartyController {
         val parties = partyServiceImp.getAllParties()
         return ResponseEntity(parties, HttpStatus.OK)
     }
+
+    @GetMapping("myParty/{userId}")
+    fun getMyParties(@PathVariable userId:String): ResponseEntity<Flux<PartyEntity>> {
+        println("get Your all party")
+        val parties = partyServiceImp.getMyParties(userId)
+        return ResponseEntity(parties, HttpStatus.OK)
+    }
+
     //Create party
     @PostMapping()
-    fun createParty(@RequestBody reqCreatePartyDTO:ReqCreatePartyDTO) : String {
+    fun createParty(@RequestBody reqCreatePartyDTO: ReqCreatePartyDTO): String {
         return partyServiceImp.createParty(reqCreatePartyDTO)
     }
 
-//Update party
+    //Update party
     @PutMapping()
     fun editParty(@RequestBody reqEditPartyDTO: ReqEditPartyDTO): String {
         println("edit party" + reqEditPartyDTO.partyId)
@@ -70,6 +81,26 @@ class PartyController {
 //            ResponseEntity(HttpStatus.NOT_FOUND)
 //        }
     }
+
+
+    @PutMapping("joinPrivate")
+    fun joinPrivateParty(
+        @RequestBody reqJoinPrivatePartyDTO: ReqJoinPrivatePartyDTO
+    ): String {
+        println("join private party code" + reqJoinPrivatePartyDTO.partyCode)
+//        val party = partyService.updateParty(id, updatedParty)
+        return partyServiceImp.joinPrivateParty(reqJoinPrivatePartyDTO)
+    }
+
+
+    @PutMapping("join")
+    fun joinParty(
+        @RequestBody reqJoinPartyDTO: ReqJoinPartyDTO
+    ): String {
+        println("joinparty" + reqJoinPartyDTO.partyId)
+
+        return partyServiceImp.joinParty(reqJoinPartyDTO)
+    }
 //
 //    @DeleteMapping("/{id}")
 //    fun deleteParty(@PathVariable id: String): ResponseEntity<Unit> {
@@ -80,5 +111,4 @@ class PartyController {
 //            ResponseEntity(HttpStatus.NOT_FOUND)
 //        }
 //    }
-
 }
