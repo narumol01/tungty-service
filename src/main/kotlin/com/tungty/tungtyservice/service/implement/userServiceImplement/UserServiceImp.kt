@@ -94,7 +94,7 @@ class UserServiceImp : userService {
             val spec = PBEKeySpec(reqEditProfileDTO.password.toCharArray(), salt, iterations, keyLength)
             val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512")
 
-            // เข้ารหัสรหัสผ่าน
+            // เข้ารหัสผ่าน
             val hashedPassword = factory.generateSecret(spec).encoded
 
             return existingUserMono.flatMap { existingUser ->
