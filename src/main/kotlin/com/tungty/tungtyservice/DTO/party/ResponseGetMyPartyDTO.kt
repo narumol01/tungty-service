@@ -1,6 +1,7 @@
-package com.tungty.tungtyservice.DTO
+package com.tungty.tungtyservice.DTO.party
 
-import com.tungty.tungtyservice.DTO.PartyDTO
+
+import com.tungty.tungtyservice.DTO.party.PartyDTO
 
 data class ResponseGetMyPartyDTO(
     var errMessage: String?,

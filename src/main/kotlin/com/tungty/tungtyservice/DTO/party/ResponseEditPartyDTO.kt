@@ -1,4 +1,5 @@
-package com.tungty.tungtyservice.DTO
+package com.tungty.tungtyservice.DTO.party
+
 
 data class ResponseEditPartyDTO(
     var errMessage: String?,

@@ -1,0 +1,176 @@
+{
+	"info": {
+		"_postman_id": "ffd2e1c6-10f8-4ff6-9448-6334bbf33967",
+		"name": "Party-TungTy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29436919",
+		"_collection_link": "https://dark-firefly-60262.postman.co/workspace/New-Team-Workspace~e1ffdf80-4d60-4e4d-ab9f-aa8c310b886b/collection/29436919-ffd2e1c6-10f8-4ff6-9448-6334bbf33967?action=share&source=collection_link&creator=29436919"
+	},
+	"item": [
+		{
+			"name": "GenpartyCode",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/party/genCode/111",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"party",
+						"genCode",
+						"111"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create party",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"partyName\": \"Owen test edit\",\r\n\"partyDescription\": \"String\",\r\n\"partyType\": \"Public\",\r\n\"partyCategory\": \"String\",\r\n\"appointmentDate\": \"2024-02-09\",\r\n\"appointmentTime\": \"String\",\r\n\"memberAmount\": 5,\r\n\"memberList\": [\"owen\",\"owen5555555\"]}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/party",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"party"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update party",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"partyId\":\"4f984e47-e908-4edd-8c58-88cfc9241dea\",\r\n\"partyName\": \"Owen edited gg\",\r\n\"partyDescription\": \"String\",\r\n\"partyType\": \"Public\",\r\n\"partyCategory\": \"String\",\r\n\"appointmentDate\": \"2024-02-09\",\r\n\"appointmentTime\": \"String\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/party",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"party"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create party Private",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"partyName\": \"Owen\",\r\n\"partyDescription\": \"String\",\r\n\"partyType\": \"Private\",\r\n\"partyCategory\": \"String\",\r\n\"appointmentDate\": \"2024-02-09\",\r\n\"appointmentTime\": \"String\",\r\n\"memberAmount\": 5,\r\n\"memberList\": [\"owen\",\"owen1\"]}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/party",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"party"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all party",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/party",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"party"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get party byId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/party/be79055c-04ca-466a-96eb-933aceee39af",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"party",
+						"be79055c-04ca-466a-96eb-933aceee39af"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPartyCode",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/party/partyCode/171155ed-dd2e-4ee3-abcf-414de836202d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"party",
+						"partyCode",
+						"171155ed-dd2e-4ee3-abcf-414de836202d"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

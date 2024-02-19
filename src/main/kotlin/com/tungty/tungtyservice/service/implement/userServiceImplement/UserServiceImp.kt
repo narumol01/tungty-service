@@ -2,7 +2,6 @@ package com.tungty.tungtyservice.service.implement.userServiceImplement
 
 import com.tungty.tungtyservice.DTO.ReqEditProfileDTO
 import com.tungty.tungtyservice.DTO.ReqRegisterDTO
-import com.tungty.tungtyservice.DTO.ReqLoginDTO
 import com.tungty.tungtyservice.entity.UserEntity
 import com.tungty.tungtyservice.repository.user.UserRepository
 import com.tungty.tungtyservice.service.userService.userService

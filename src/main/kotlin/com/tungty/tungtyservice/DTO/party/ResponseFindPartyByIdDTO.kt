@@ -1,4 +1,5 @@
-package com.tungty.tungtyservice.DTO
+package com.tungty.tungtyservice.DTO.party
+
 
 import java.sql.Time
 import java.sql.Timestamp
