@@ -1,6 +1,5 @@
 package com.tungty.tungtyservice.DTO.party
 
-
 import com.tungty.tungtyservice.DTO.party.PartyDTO
 
 data class ResponseGetMyPartyDTO(
