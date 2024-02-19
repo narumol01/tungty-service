@@ -61,7 +61,7 @@ class PartyServiceImp: PartyService {
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
             val current = LocalDateTime.now().format(formatter)
             val id = UUID.randomUUID().toString()
-            val partyOwner = "TestName"
+            val partyOwner = reqCreatePartyDTO.memberList[0] //First Person is Owner of the party
 
             val party = PartyEntity(
                 partyId = id,
