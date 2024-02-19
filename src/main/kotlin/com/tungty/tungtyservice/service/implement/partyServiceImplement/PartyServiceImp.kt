@@ -210,16 +210,20 @@ override fun editParty(reqEditPartyDTO: ReqEditPartyDTO): String {
 
             var existingPartyMono: Mono<PartyEntity> = partyRepository.findById(partyId)
 
+
             return existingPartyMono.flatMap { existingParty ->
                 if (existingParty.memberList.size < existingParty.memberAmount) {
                     // Update only the attributes that need to be changed
                     existingParty.memberList = existingParty.memberList.plus(userId)
                     existingParty.updateDateTime = current.toString()
+                    if (existingParty.partyType == "Private") {
+                        throw  Exception("Party is Private. Cannot join.")
+                    }
 
                     // Save the updated party entity back to the database
                     partyRepository.save(existingParty)
                 } else {
-                    throw IllegalArgumentException("Party is full. Cannot join.")
+                    throw Exception("Party is full. Cannot join.")
                 }
             }.block()?.toString() ?: "fail"
         } catch (error: Exception) {
