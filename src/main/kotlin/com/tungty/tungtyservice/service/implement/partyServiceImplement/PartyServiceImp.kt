@@ -187,9 +187,14 @@ override fun editParty(reqEditPartyDTO: ReqEditPartyDTO): String {
             return existingPartyFlux
                 .filter { party -> partyCode == party.partyCode && party.memberList.size < party.memberAmount }
                 .flatMap { existingParty ->
+
+                    if (userId in existingParty.memberList) {
+                        throw Exception("User is already part of the party. Cannot join again.")
+                    }
                     // Append the user to the memberList
                     existingParty.memberList = existingParty.memberList.plus(userId)
                     existingParty.updateDateTime = current.toString()
+
 
                     // Save the updated party entity back to the database
                     partyRepository.save(existingParty)
@@ -213,6 +218,11 @@ override fun editParty(reqEditPartyDTO: ReqEditPartyDTO): String {
 
             return existingPartyMono.flatMap { existingParty ->
                 if (existingParty.memberList.size < existingParty.memberAmount) {
+
+                    if (userId in existingParty.memberList) {
+                        throw Exception("User is already part of the party. Cannot join again.")
+                    }
+
                     // Update only the attributes that need to be changed
                     existingParty.memberList = existingParty.memberList.plus(userId)
                     existingParty.updateDateTime = current.toString()
