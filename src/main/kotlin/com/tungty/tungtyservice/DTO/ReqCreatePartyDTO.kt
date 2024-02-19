@@ -1,4 +1,4 @@
-package com.tungty.tungtyservice.dto
+package com.tungty.tungtyservice.DTO
 
 import com.tungty.tungtyservice.DTO.UserDTO
 import java.sql.Time

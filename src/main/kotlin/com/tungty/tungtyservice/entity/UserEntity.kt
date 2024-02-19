@@ -1,6 +1,7 @@
 package com.tungty.tungtyservice.entity
 
 import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 
 // User Entity
@@ -9,15 +10,17 @@ import org.springframework.data.mongodb.core.mapping.Document
 data class UserEntity(
         @Id
         val userId: String,
-        val name: String,
-        val surname: String,
+        var name: String,
+        var surname: String,
+        @Indexed(unique = true)
         val username: String,
-        val password: String,
-        val studentId: String,
-        val faculty: String,
-        val field: String,
-        val year: Int,
-        val profileImg: String,
+        var password: String,
+        @Indexed(unique = true)
+        var studentId: String,
+        var faculty: String,
+        var field: String,
+        var year: Int,
+        var profileImg: String,
         val createDateTime: String,
-        val updateDateTime: String
+        var updateDateTime: String
 )

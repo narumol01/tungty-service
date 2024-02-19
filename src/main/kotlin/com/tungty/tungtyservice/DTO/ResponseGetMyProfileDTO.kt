@@ -1,11 +1,11 @@
-package com.tungty.tungtyservice.dto
+package com.tungty.tungtyservice.DTO
 
-import java.util.StringJoiner
 
 data class ResponseGetMyProfileDTO(
     var userId: String,
     var username: String,
-    var name: StringJoiner,
+    var name: String,
+    var surname: String,
     var faculty: String,
     var field: String,
     var year: String

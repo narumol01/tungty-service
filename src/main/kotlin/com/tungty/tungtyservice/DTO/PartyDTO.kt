@@ -1,4 +1,4 @@
-package com.tungty.tungtyservice.DTO;
+package com.tungty.tungtyservice.DTO
 
 data class PartyDTO (
     val partyId: String,
