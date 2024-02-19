@@ -14,6 +14,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @RestController
+@CrossOrigin(origins = ["http://192.168.1.107:8081/"])
 @RequestMapping("/party")
 class PartyController {
 
@@ -35,6 +36,7 @@ class PartyController {
         return "Get PartyCode at controller"
 //        return partyCodeService.getPartyCode(partyId)
     }
+
 
 
     //CRUD party
