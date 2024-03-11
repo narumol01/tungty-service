@@ -1,53 +1,46 @@
 package com.tungty.tungtyservice.service.implement.userServiceImplement
-
 import com.tungty.tungtyservice.DTO.ReqEditProfileDTO
 import com.tungty.tungtyservice.DTO.ReqRegisterDTO
 import com.tungty.tungtyservice.entity.UserEntity
 import com.tungty.tungtyservice.repository.user.UserRepository
+import com.tungty.tungtyservice.service.userService.HashService
 import com.tungty.tungtyservice.service.userService.userService
+import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.mongodb.core.query.Criteria
+import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import java.security.SecureRandom
 import java.util.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import javax.crypto.SecretKeyFactory
-import javax.crypto.spec.PBEKeySpec
 
 @Service
 class UserServiceImp : userService {
-    @Autowired
-    lateinit var userRepository: UserRepository
 
+    @Autowired
+    lateinit var userRepository : UserRepository
+    lateinit var encoder: HashService
+
+    @PostConstruct
+    private fun init() {
+        encoder = HashService() // Initialize the encoder here
+    }
     override fun createUser(reqRegisterDTO: ReqRegisterDTO): String {
         try {
             val id = UUID.randomUUID().toString()
-
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
             val current = LocalDateTime.now().format(formatter)
 
-            // สร้าง salt สำหรับเพิ่มความปลอดภัยในการเข้ารหัส
-            val salt = ByteArray(16)
-            val random = SecureRandom()
-            random.nextBytes(salt)
-
-            // กำหนดค่าการกำหนดรหัส PBKDF2
-            val iterations = 10000
-            val keyLength = 512
-            val spec = PBEKeySpec(reqRegisterDTO.password.toCharArray(), salt, iterations, keyLength)
-            val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512")
-
-            // เข้ารหัสรหัสผ่าน
-            val hashedPassword = factory.generateSecret(spec).encoded
+            val hashedPassword = encoder.hashBCrypt(reqRegisterDTO.password)
 
             val user = UserEntity(
                     userId = id,
                     name = reqRegisterDTO.name,
                     surname = reqRegisterDTO.surname,
                     username = reqRegisterDTO.username,
-                    password = Base64.getEncoder().encodeToString(hashedPassword),
+                    password = hashedPassword,
                     studentId = reqRegisterDTO.studentId,
                     faculty = reqRegisterDTO.faculty,
                     field = reqRegisterDTO.field,
@@ -65,8 +58,11 @@ class UserServiceImp : userService {
         }
     }
 
-    override fun getUserById(userId: String): Mono<UserEntity?> {
+    override fun findUserById(userId: String): Mono<UserEntity?> {
         return userRepository.findById(userId)
+    }
+    override fun findUserByUsername(username: String): Mono<UserEntity> {
+        return userRepository.findByUsername(username)
     }
 
     override fun getAllUsers(): Flux<UserEntity> {
@@ -80,28 +76,15 @@ class UserServiceImp : userService {
             // Fetch the existing party entity from the database
             val userId = reqEditProfileDTO.userId
 
+            val hashedPassword = encoder.hashBCrypt(reqEditProfileDTO.password)
+
             var existingUserMono: Mono<UserEntity> = userRepository.findById(userId)
-
-
-            // สร้าง salt สำหรับเพิ่มความปลอดภัยในการเข้ารหัส
-            val salt = ByteArray(16)
-            val random = SecureRandom()
-            random.nextBytes(salt)
-
-            // กำหนดค่าการกำหนดรหัส PBKDF2
-            val iterations = 10000
-            val keyLength = 512
-            val spec = PBEKeySpec(reqEditProfileDTO.password.toCharArray(), salt, iterations, keyLength)
-            val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512")
-
-            // เข้ารหัสผ่าน
-            val hashedPassword = factory.generateSecret(spec).encoded
 
             return existingUserMono.flatMap { existingUser ->
                 // Update only the attributes that need to be changed
                 existingUser.name = reqEditProfileDTO.name
                 existingUser.surname = reqEditProfileDTO.surname
-                existingUser.password = Base64.getEncoder().encodeToString(hashedPassword)
+                existingUser.password = hashedPassword
                 existingUser.studentId = reqEditProfileDTO.studentId
                 existingUser.faculty = reqEditProfileDTO.faculty
                 existingUser.field = reqEditProfileDTO.field
