@@ -61,7 +61,7 @@ class PartyServiceImp: PartyService {
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
             val current = LocalDateTime.now().format(formatter)
             val id = UUID.randomUUID().toString()
-            val partyOwner = "TestName"
+            val partyOwner = reqCreatePartyDTO.memberList[0] //First Person is Owner of the party
 
             val party = PartyEntity(
                 partyId = id,
@@ -187,9 +187,14 @@ override fun editParty(reqEditPartyDTO: ReqEditPartyDTO): String {
             return existingPartyFlux
                 .filter { party -> partyCode == party.partyCode && party.memberList.size < party.memberAmount }
                 .flatMap { existingParty ->
+
+                    if (userId in existingParty.memberList) {
+                        throw Exception("User is already part of the party. Cannot join again.")
+                    }
                     // Append the user to the memberList
                     existingParty.memberList = existingParty.memberList.plus(userId)
                     existingParty.updateDateTime = current.toString()
+
 
                     // Save the updated party entity back to the database
                     partyRepository.save(existingParty)
@@ -210,16 +215,25 @@ override fun editParty(reqEditPartyDTO: ReqEditPartyDTO): String {
 
             var existingPartyMono: Mono<PartyEntity> = partyRepository.findById(partyId)
 
+
             return existingPartyMono.flatMap { existingParty ->
                 if (existingParty.memberList.size < existingParty.memberAmount) {
+
+                    if (userId in existingParty.memberList) {
+                        throw Exception("User is already part of the party. Cannot join again.")
+                    }
+
                     // Update only the attributes that need to be changed
                     existingParty.memberList = existingParty.memberList.plus(userId)
                     existingParty.updateDateTime = current.toString()
+                    if (existingParty.partyType == "Private") {
+                        throw  Exception("Party is Private. Cannot join.")
+                    }
 
                     // Save the updated party entity back to the database
                     partyRepository.save(existingParty)
                 } else {
-                    throw IllegalArgumentException("Party is full. Cannot join.")
+                    throw Exception("Party is full. Cannot join.")
                 }
             }.block()?.toString() ?: "fail"
         } catch (error: Exception) {
