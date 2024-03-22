@@ -7,6 +7,7 @@ import com.tungty.tungtyservice.service.NotifyService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -52,6 +53,28 @@ class NotifyServiceImp: NotifyService {
         return  notifyRepository.findAllByUserId(userId)
     }
 
+    override fun updateStatus(notifyId: String, status: String): String {
+        try {
+            var datanotify = notifyRepository.findById(notifyId).block()
+            datanotify?.status = status
+            val result = notifyRepository.save(datanotify!!)
+            return result.block().toString()
+        }catch (e: Exception){
+            return e.toString()
+        }
+    }
 
+    override fun deleteNotify(notifyId: String): String {
+        try {
+            val result = notifyRepository.deleteById(notifyId)
+            return result.toString()
+        }catch (e: Exception){
+            return e.toString()
+        }
+    }
+
+    override fun findNotifyById(notifyId: String): Mono<NotifyEntity> {
+        return notifyRepository.findById(notifyId)
+    }
 
 }

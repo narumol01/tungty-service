@@ -7,13 +7,9 @@ import com.tungty.tungtyservice.service.NotifyService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 import java.sql.DriverManager
 
 @RestController
@@ -37,17 +33,26 @@ class NotifyController {
         return notifyService.findAllNotify()
     }
 
-//    @PostMapping("/doJob")
-//    fun createNotifyJob(){
-//        System.out.println("Say ...");
-//        notifyJob.addNewTask( "2024-03-1 03:25")
-//    }
+    @GetMapping("/{notifyId}")
+    fun getNotify(@PathVariable notifyId: String): Mono<NotifyEntity> {
+        return notifyService.findNotifyById(notifyId)
+    }
+
+    @PutMapping("/updateStatus/{notifyId}/{status}")
+    fun updateNotify(@PathVariable notifyId: String, @PathVariable status: String): String{
+        return notifyService.updateStatus(notifyId, status)
+    }
 
     @PostMapping("/createNotify")
     fun createNotify(@RequestBody body: ReqAddNotifyDTO): String{
         // using this service when edit party, delete party and create party
         // they gonna set job in this service too
         return notifyService.addNotify(body)
+    }
+
+    @DeleteMapping("/delete/{notifyId}")
+    fun deleteNotify(@PathVariable notifyId: String): String{
+        return notifyService.deleteNotify(notifyId)
     }
 
 }
