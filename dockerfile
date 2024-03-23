@@ -1,5 +1,4 @@
-FROM gradle:7.5.1-jdk17 AS build
-WORKDIR /app
-COPY . .
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "demo.jar"]
+FROM openjdk:17-jdk-slim
+EXPOSE 8087
+ADD /build/libs/tungty-service-0.0.1-SNAPSHOT.jar tungty-service.jar
+ENTRYPOINT ["java", "-jar", "tungty-service.jar"]
