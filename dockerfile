@@ -1,21 +1,12 @@
-#FROM openjdk:17-jdk-slim
-#EXPOSE 8087
-#ADD /build/libs/tungty-service-0.0.1-SNAPSHOT.jar tungty-service.jar
-#ENTRYPOINT ["java", "-jar", "tungty-service.jar"]
-
-
 FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-# Copy project files
-COPY . .
+# Copy project files (excluding the JAR)
+COPY . . !tungty-service-0.0.1-SNAPSHOT.jar
 
-# Build the JAR using Maven (assuming Maven is installed)
-RUN mvn clean package
-
-# Copy the JAR file
-COPY /build/libs/tungty-service-0.0.1-SNAPSHOT.jar tungty-service.jar
+# Copy the pre-built JAR file
+COPY tungty-service-0.0.1-SNAPSHOT.jar .
 
 EXPOSE 8087
 ENTRYPOINT ["java", "-jar", "tungty-service.jar"]
