@@ -1,21 +1,14 @@
+# Stage 1: Build the application and generate the jar
+FROM gradle:7.5.1-jdk17 AS builder
+
+WORKDIR /app
+COPY . .
+RUN gradle build
+
+# Stage 2: Copy the jar into a slim base image
 FROM openjdk:17-jdk-slim
+
+COPY --from=builder /app/build/libs/*.jar tungty-service.jar
+
 EXPOSE 8087
-ADD /build/libs/tungty-service-0.0.1-SNAPSHOT.jar tungty-service.jar
 ENTRYPOINT ["java", "-jar", "tungty-service.jar"]
-
-
-#FROM openjdk:17-jdk-slim
-#
-#WORKDIR /app
-#
-## Copy project files
-#COPY . .
-#
-## Build the JAR using Maven (assuming Maven is installed)
-#RUN mvn clean package
-#
-## Copy the JAR file
-#COPY /build/libs/tungty-service-0.0.1-SNAPSHOT.jar tungty-service.jar
-#
-#EXPOSE 8087
-#ENTRYPOINT ["java", "-jar", "tungty-service.jar"]
