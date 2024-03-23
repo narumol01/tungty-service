@@ -1,11 +1,10 @@
-FROM openjdk:17-jdk-alpine
+FROM gradle:7.5.1-jdk17 AS build
+WORKDIR /app  # Optional working directory
 
-WORKDIR /app
+# Assuming a Gradle wrapper is present
+RUN ./gradlew clean build
 
-COPY build/libs/my-project-0.0.1-SNAPSHOT.jar app.jar
-
-RUN ["java", "-jar", "app.jar"]
-
-EXPOSE 8088
-
-CMD ["java", "-jar", "app.jar"]
+FROM openjdk:17.0.1-jdk-slim
+COPY --from=build /app/build/libs/demo-0.0.1-SNAPSHOT.jar demo.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "demo.jar"]
