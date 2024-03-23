@@ -2,11 +2,14 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-# Copy project files (excluding the JAR)
-COPY . . !tungty-service-0.0.1-SNAPSHOT.jar
+# Copy project files
+COPY . .
 
-# Copy the pre-built JAR file
-COPY tungty-service-0.0.1-SNAPSHOT.jar .
+# Build the JAR using Gradle
+RUN gradle build
+
+# Copy the JAR file (assuming Gradle's default location)
+COPY /build/libs/tungty-service-0.0.1-SNAPSHOT.jar tungty-service.jar
 
 EXPOSE 8087
 ENTRYPOINT ["java", "-jar", "tungty-service.jar"]
